@@ -6,7 +6,70 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <script src="js/jquery.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+        .row {
+            padding-top: 1.5em;
+        }
+    </style>
+    <script type="text/javascript">
+    var openWeatherAppId = '504b938af318ddf00cc252e498215892',
+        openWeatherUrl = 'http://api.openweathermap.org/data/2.5/forecast';
 
+    var prepareData = function(units) {
+        // Replace loading image
+        var cityName = $('#city-name').val();
+
+        // Make ajax call, callback
+        if (cityName && cityName != '') {
+            cityName = cityName.trim();
+            //  Call function getData with params then process getData from weather api
+            getData(openWeatherUrl, cityName, openWeatherAppId, units);
+        }
+
+    }
+
+    $(document).ready(function() {
+        $('.btn-metric').click(function() {
+            prepareData('metric');
+        });
+        $('.btn-imperial').click(function() {
+            prepareData('imperial');
+        });
+    });
+
+    function getData(url, cityName, appId, units) {
+
+        var request = $.ajax({
+            url: url,
+            dataType: "jsonp",
+            data: {q: cityName, appid: appId, units: units},
+            jsonpCallback: "fetchData",
+            type: "GET"
+        }).fail(function(error) {
+            console.error(error);
+            alert('Error sending request');
+        });
+
+    } // end getData
+
+    function fetchData(forecast) {
+        console.log(forecast);
+        var html = '';
+        var cityName = forecast.city.name;
+        var country = forecast.city.country;
+
+        html += '<h3> Weather Forecast for '+ cityName + ', ' + country + '</h3>';
+        console.log(html);
+
+        forecast.list.forEach(function(forecastEntry, index, list) {
+            html += '<p>' + forecastEntry.dt_txt + ': ' + forecastEntry.main.temp + '</p>'
+        })
+
+        $("#log").html(html);
+
+    }
+
+    </script>
 </head>
 <body>
     
