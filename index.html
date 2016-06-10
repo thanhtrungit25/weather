@@ -54,15 +54,23 @@
 
     function fetchData(forecast) {
         console.log(forecast);
-        var html = '';
-        var cityName = forecast.city.name;
-        var country = forecast.city.country;
+        var html = '',
+            cityName = forecast.city.name,
+            country = forecast.city.country;
 
-        html += '<h3> Weather Forecast for '+ cityName + ', ' + country + '</h3>';
+        html += '<h3> Weather Forecast for '
+            + cityName
+            + ', '
+            + country
+            + '</h3>';
         console.log(html);
 
         forecast.list.forEach(function(forecastEntry, index, list) {
-            html += '<p>' + forecastEntry.dt_txt + ': ' + forecastEntry.main.temp + '</p>'
+            html += '<p>'
+                + forecastEntry.dt_txt
+                + ': '
+                + forecastEntry.main.temp
+                + '</p>'
         })
 
         $("#log").html(html);
